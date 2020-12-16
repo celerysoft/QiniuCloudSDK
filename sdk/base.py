@@ -6,7 +6,7 @@ import json
 from urllib.parse import urlparse
 
 import requests
-from qiniu import QiniuMacAuth
+from qiniu import QiniuMacAuth, Auth
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
@@ -36,6 +36,13 @@ class BaseSDK(object):
         session.mount('http://', adapter)
         session.mount('https://', adapter)
         return session
+
+
+class BaseQiniuSDK(BaseSDK):
+    _qiniu_auth = None  # type: Auth
+
+    def __init__(self):
+        self._qiniu_auth = Auth(self._ACCESS_KEY, self._SECRET_KEY)
 
 
 class BaseQiniuMacSDK(BaseSDK):
